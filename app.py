@@ -1,7 +1,11 @@
 from covidData import CovidInfo,CovidInfo_India
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response,redirect
 
 app = Flask(__name__)
+
+@app.route('/')
+def redir():
+    return redirect("https://github.com/boredsid/covid-live", code=302)
 
 @app.route('/covid',methods=['GET'])
 def respond():
