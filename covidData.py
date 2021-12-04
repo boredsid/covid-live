@@ -44,22 +44,24 @@ class CovidInfo():
 class CovidInfo_India():
 
     def __init__(self,state=None):
-        self.url_cases = 'https://api.data.gov.in/resource/cd08e47b-bd70-4efb-8ebc-589344934531?format=csv&limit=all&api-key=579b464db66ec23bdd000001cdc3b564546246a772a26393094f5645'
-        cases_raw = pd.read_csv(self.url_cases)
-        self.last_updated = cases_raw['DateTime'][0]
+        self.url_cases = 'https://www.mohfw.gov.in/data/datanew.json'
+        cases_raw = pd.read_json(self.url_cases)
+        self.last_updated = 'NA'
         self.cases = self.casesCleaner(cases_raw)
         self.stateFilter(state)
     
     def casesCleaner(self,df):
-        df.drop(['S. No.','Date','DateTime'],axis=1,inplace=True)
-        df.columns = ['State','Total Cases','Recovered','Death']
+        df.drop(['sno','active','positive','cured','death','state_code'],axis=1,inplace=True)
+        df.columns = ['State','Active Cases','Total Cases','Recovered','Death']
+        df.drop(len(df)-1,inplace=True)
+        df['State'] = df['State'].apply(lambda row: row.replace('*',''))
         return df
 
     def metricSetter(self,cases):
         self.total_cases = cases['Total Cases'].sum()
         self.recovered = cases['Recovered'].sum()
         self.deaths = cases['Death'].sum()
-        self.active_cases = self.total_cases - self.recovered - self.deaths
+        self.active_cases = cases['Active Cases'].sum()
 
     def stateFilter(self,state=None):
         self.state=None
@@ -80,8 +82,3 @@ class CovidInfo_India():
                         'Recovered':self.recovered,'Deaths':self.deaths,
                         'Active Cases':self.active_cases}
         return str(result_dict)
-
-
-
-
-
