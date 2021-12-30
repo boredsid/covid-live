@@ -16,7 +16,11 @@ class CovidInfo():
         return df_new
 
     def metricSetter(self,cases):
-        self.last_updated = max(cases.loc[cases['location']==self.country,'date'])
+        last_updated_check = max(cases.loc[cases['location']==self.country,'date'])
+        if cases.loc[(cases['location']==self.country)&(cases['date']==last_updated_check),'total_cases'].isnull().sum()>0:
+            last_updated_check = pd.to_datetime(cases.loc[cases['location']==self.country,'date']).nlargest(2).dt.strftime('%Y-%m-%d').iloc[1]
+        
+        self.last_updated = last_updated_check
         self.total_cases = int(cases.loc[(cases['location']==self.country)&
                                 (cases['date']==self.last_updated),'total_cases'])
         self.deaths = int(cases.loc[(cases['location']==self.country)&
