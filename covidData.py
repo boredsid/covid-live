@@ -55,7 +55,7 @@ class CovidInfo_India():
         self.stateFilter(state)
     
     def casesCleaner(self,df):
-        df.drop(['sno','active','positive','cured','death','death_reconsille','total','state_code'],axis=1,inplace=True)
+        df.drop(['sno','active','positive','cured','death','death_reconsille','total','state_code','actualdeath24hrs'],axis=1,inplace=True)
         df.columns = ['State','Active Cases','Total Cases','Recovered','Death']
         df.drop(len(df)-1,inplace=True)
         df['State'] = df['State'].apply(lambda row: row.replace('*',''))
