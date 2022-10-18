@@ -29,6 +29,7 @@ def respond():
     response['Country'] = data.country
     response['Total Cases'] = str(data.total_cases)
     response['Deaths'] = str(data.deaths)
+    response['Documentation'] = "https://github.com/boredsid/covid-live"
 
     return jsonify(response)
 
@@ -52,6 +53,8 @@ def respond_india():
     response['Recovered']=str(data.recovered)
     response['Deaths']=str(data.deaths)
     response['Active Cases']=str(data.active_cases)
+    response['Documentation'] = "https://github.com/boredsid/covid-live"
+
     return jsonify(response)
 
 if __name__ == '__main__':
